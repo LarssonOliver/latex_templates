@@ -1,0 +1,212 @@
+% -------------------------------
+% Latex report template.
+% -------------------------------
+
+\documentclass[10pt, titlepage, oneside, a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{courier}
+\usepackage{csquotes}
+\usepackage{pgffor}
+\usepackage{etoolbox}
+\usepackage{biblatex}
+
+\usepackage{hyperref} % import hyperref last
+
+% -------------------------------
+% Editable settings section.
+% Example values follow the fields. Remove define to remove field in doc.
+
+\def\school{SCHOOL} % "UMEÅ UNIVERSITY
+\def\inst{INSTITUTION} % "Department of Computing Science"
+\def\typeofdoc{TYPE} % "Report"
+% \def\bibs{refs.bib} % Comma seperated list of biblatex resources.
+
+\def\course{COURSENAME} % "Operating Systems"
+\def\courselen{LENGTH} % "7.5 HP"
+\def\courseid{COURSEID} % "5DV176"
+
+\def\pretitle{PRETITLE} % "Assignment 1"
+\def\doctitle{TITLE} % Syscall
+\def\reportdate{\today} % "March 25, 2021"
+% \def\version{VERSION} % "1.0"
+
+\def\names{NAME1,NAME2} % Comma separated list of students
+\def\emails{EMAIL1@DOMAIN.COM,EMAIL2@DOMAIN.COM} % Student emails, same order as names.
+% \def\footernames{FNAME1, FNAME2} % Used in footer if defined, defaults to \names if not def.
+
+\def\teacher{TEACHER NAME} % Course responsible
+\def\assistants{TA1,TA2} % Comma separated list of TAs.
+
+% End editable settings section.
+% -------------------------------
+
+
+% Make all links black.
+\hypersetup{colorlinks=true,allcolors=black}
+
+% Set up lstlisting styles.
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,frame=single}
+
+% Count names and TAs.
+\ifdefined\names
+    \newcounter{names}
+    \foreach \name in \names {\stepcounter{names}}
+\fi
+\ifdefined\assistants
+    \newcounter{tas}
+    \foreach \ta in \assistants {\stepcounter{tas}}
+\fi
+
+% Define footernames if not defined.
+\ifx\footernames\undefined
+    \def\footernames{\names}
+\fi
+
+% Add bib resources.
+\ifdefined\bibs
+    \foreach \bib in \bibs {\addbibresource{\bib}}
+\fi
+
+\begin{document}
+
+    \begin{titlepage}
+        \thispagestyle{empty}
+        \begin{center}
+            \begin{large}
+                \begin{tabular}{@{}p{\textwidth}@{}}
+                    \textbf{\ifdefined\school \school\fi \hfill \ifdefined\reportdate \reportdate\fi} \\
+                    \textbf{\ifdefined\inst \inst\fi \hfill \ifdefined\version \version\fi} \\
+                    \ifdefined\typeofdoc \textbf{\typeofdoc} \\\fi
+                \end{tabular}
+            \end{large}
+        \end{center}
+        \vspace{2em}
+        \begin{center}
+            \ifdefined\courseid
+                \ifdefined\pretitle
+                    \LARGE{\courseid \ - \pretitle} \\
+                \else
+                    \LARGE{\courseid} \\
+                \fi
+            \else
+                \ifdefined\pretitle
+                    \LARGE{\pretitle} \\
+                \fi
+            \fi
+            \ifdefined\course
+                \huge{\textbf{\course \ifdefined\courselen , \courselen \fi}} \\
+            \fi
+            \ifdefined\doctitle
+                \vspace{2em}
+                \LARGE{\doctitle} \\
+            \fi
+            \vspace{3em}
+            \begin{large}
+                \ifdefined\names
+                    \ifnum\value{names}=1%
+                        \begin{tabular}{ll}
+                            \textbf{Name} & \names \\
+                            \\
+                            \ifdefined\emails
+                                \textbf{Email} & \texttt{\emails} \\
+                                \\
+                            \fi
+                        \end{tabular}
+                    \else % More than one student.
+                        \def\nametbl{}
+                        \foreach \name [count=\nameidx] in \names {                        
+                            \xappto\nametbl{& \name & }
+                            \ifdefined\emails
+                                \foreach \email [count=\emailidx] in \emails {
+                                    \ifnum\nameidx=\emailidx{}%
+                                        \xappto\nametbl{\email}
+                                    \fi
+                                }
+                            \fi
+                            \xappto\nametbl{ \\ \\}
+                        }
+                        \begin{tabular}{lll}
+                            \textbf{Names} \nametbl
+                        \end{tabular}
+                    \fi
+                \fi
+            \end{large}
+
+            \vfill
+
+            \ifdefined\teacher
+                \large{\textbf{Teacher}} \\
+                \mbox{\large{\teacher}} \\
+            \fi
+
+            \ifdefined\assistants
+                \vspace{2em}
+                \ifnum \value{tas} = 1
+                    \large{\textbf{Assistant}} \\
+                \else
+                    \large{\textbf{Assistants}} \\
+                \fi
+                \foreach \grader in \assistants
+                {
+                    \mbox{\large{\grader}} \\
+                }
+            \fi
+        \end{center}
+    \end{titlepage}
+
+    \ifdefined\footernames \lfoot{\footnotesize{\footernames}}\fi
+
+    \ifdefined\reportdate \rfoot{\footnotesize{\reportdate}}\fi
+    \ifdefined\doctitle \lhead{\sc\footnotesize\doctitle}\fi
+    \rhead{\nouppercase{\sc\footnotesize\leftmark}}
+    
+    \pagestyle{fancy}
+    \renewcommand{\headrulewidth}{0.2pt}
+    \renewcommand{\footrulewidth}{0.2pt}
+    
+    % Cover sheet
+    % Abstract
+    % Content
+    % Problem Specification
+    % Usage and user's guide
+    % Algorithm Description
+    % Systems Description
+    % Limitations on the Solution
+    % Problems and Reflections
+    % Test runs
+    % References
+    % Source Code
+    % Attachments
+
+    % \begin{figure}[H] %usepackage{float}
+    %     \centering
+    %     \fboxsep=0mm %padding thickness
+    %     \fboxrule=2pt %border thickness
+    %     \includegraphics[width=0.8\textwidth]{fig.png}
+    %     \caption{Figure caption.}
+    %     \label{fig:}
+    % \end{figure}
+
+    % \begin{lstlisting}[language=C]
+    % \end{lstlisting}
+
+    \pagenumbering{roman}
+    \tableofcontents
+ 
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{10pt}
+
+    \newpage
+    \pagenumbering{arabic}
+
+    \normalsize
+
+    \section{Introduction}
+
+
+\end{document}
