@@ -42,6 +42,8 @@
 \def\teacher{TEACHER NAME} % Course responsible
 \def\assistants{TA1,TA2} % Comma separated list of TAs.
 
+% \def\abst{ABSTRACT} % Entire abstract if needed.
+
 % End editable settings section.
 % -------------------------------
 
@@ -136,6 +138,18 @@
                     \fi
                 \fi
             \end{large}
+            
+            \ifdefined\abst
+            \vfill
+            \noindent\rule{\textwidth}{0.2pt} 
+
+        \end{center}
+        \begin{large}
+            \textbf{Sammanfattning} \textit{\abst}
+        \end{large}
+        \begin{center}
+            \noindent\rule{\textwidth}{0.2pt}
+            \fi
 
             \vfill
 
